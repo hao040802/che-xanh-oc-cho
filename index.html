@@ -329,7 +329,7 @@
         function controlVehicle(command) {
             client.publish('bus/control', command); // Gửi lệnh điều khiển phương tiện
         }
-
+        
         addMarker(10.731731, 106.698619, "A");
         addMarker(10.732349, 106.698599, "B");
         addMarker(10.731375, 106.698652, "C");
@@ -340,15 +340,17 @@
         addMarker(10.731970, 106.699623, "G");
         addMarker(10.730805, 106.699786, "H");
 
-        // Switch between auto and manual panels
+        // Switch between auto and manual panels 
         document.getElementById('autoMode').onclick = function() {
-            document.getElementById('auto-panel').style.display = 'block';
-            document.getElementById('manual-panel').style.display = 'none';
+            document.getElementById('auto-panel').style.display = 'block'; 
+            document.getElementById('manual-panel').style.display = 'none'; 
+            client.publish('bus/mode', 'auto'); // Gửi chế độ "auto" về MQTT Broker
         };
 
-        document.getElementById('manualMode').onclick = function() {
-            document.getElementById('auto-panel').style.display = 'none';
-            document.getElementById('manual-panel').style.display = 'block';
+        document.getElementById('manualMode').onclick = function() { 
+            document.getElementById('auto-panel').style.display = 'none'; 
+            document.getElementById('manual-panel').style.display = 'block'; 
+            client.publish('bus/mode', 'manual'); // Gửi chế độ "manual" về MQTT Broker
         };
     </script>
 </body>
