@@ -191,7 +191,7 @@
         <div id="map"></div>
     </div>
     <footer>
-        Được thiết kế bởi <a href="#">Nhóm Phát Triển</a> | 2024
+        Được thiết kế bởi <a href="#">Keep The Blue Flag Fly High</a> | 2024
     </footer>
     <script>
         const client = mqtt.connect("wss://48296e48195e4fc1a1f0bc944943df86.s1.eu.hivemq.cloud:8884/mqtt", {
@@ -202,12 +202,11 @@
         var currentMarker;
         var selectedStops = [];
         var mode = 'single';
-
+        //các dòng thonng6 báo
         client.on("connect", () => {
             console.log("Đã kết nối đến MQTT Broker");
             client.subscribe("esp32/gps"); // Đăng ký nhận dữ liệu vị trí GPS
         });
-
         client.on("message", (topic, message) => {
             console.log(`Chủ đề: ${topic}, Tin nhắn: ${message.toString()}`);
             const data = JSON.parse(message.toString());
@@ -217,15 +216,13 @@
                 console.error('Dữ liệu GPS không hợp lệ');
             }
         });
-
         client.on("error", (error) => {
             console.error("Lỗi kết nối:", error);
         });
-
         client.on("close", () => {
             console.log("Mất kết nối đến MQTT Broker");
         });
-
+        //Khai báo biến map, xác định giới hạn map, tỉ lệ zoom
         var map = L.map('map', {
             center: [10.731804, 106.698352],
             zoom: 18.4,
@@ -242,13 +239,12 @@
             maxZoom: 19,
             attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
-
+        // Lựa chọn chế độ        
         document.getElementById('modeSelector').onchange = function() {
             mode = this.value;
             selectedStops = [];
             alert("Đã chuyển sang chế độ: " + (mode === 'single' ? "Chọn 1 điểm" : "Chọn nhiều điểm"));
         };
-
         document.getElementById('startButton').onclick = function() {
             if (selectedStops.length > 0) {
                 if (mode === 'multiple') {
@@ -260,6 +256,7 @@
                 alert("Vui lòng chọn ít nhất một điểm dừng");
             }
         };
+        //Thêm các nút nhấn điều khiển
         document.getElementById('forwardButton').onclick = function() {
             controlVehicle("forward");
         };
@@ -283,7 +280,7 @@
         document.getElementById('turnRightButton').onclick = function() {
             controlVehicle("turnRight");
         };
-
+        // Mã update vị trí hiện tại trên map
         function updatePosition(lat, lng) {
             if (lat && lng) {
                 if (currentMarker) {
@@ -296,7 +293,7 @@
                 console.error('Vĩ độ hoặc kinh độ không hợp lệ');
             }
         }
-
+        // Mã đánh dấu các điểm dừng trên map
         function addMarker(lat, lng, name) {
             var marker = L.marker([lat, lng]).addTo(map);
             marker.bindPopup("<b>" + name + "</b><br>Nhấn để chọn");
@@ -340,7 +337,7 @@
         addMarker(10.731970, 106.699623, "G");
         addMarker(10.730805, 106.699786, "H");
 
-        // Switch between auto and manual panels 
+        // Chuyển đổi giữa 2 chế độ Auto và Manual
         document.getElementById('autoMode').onclick = function() {
             document.getElementById('auto-panel').style.display = 'block'; 
             document.getElementById('manual-panel').style.display = 'none'; 
